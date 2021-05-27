@@ -8,6 +8,8 @@ class FilterForm extends ApplicationForm {
 		$this->set_button_text(_("Filtrovat"));
 		$this->set_attr('id', 'filter_form');
 		$this->set_attr('autocomplete', 'off');
+
+		$this->top_fields = ['f_flags' => 'f_flags'];
 	}
 
 	function set_up_filter($filter, $params, $options = []) {
@@ -60,9 +62,9 @@ class FilterForm extends ApplicationForm {
 	 **/
 	function update_choices() {
 		//Update state of fields (e.g. disable options for which no valid item exists)
-		foreach($this->fields as $field) {
+		foreach($this->fields as $key => $field) {
 			if($field instanceof IFilterFormField) {
-				$field->update_by_filter($this->filter);
+				$field->update_by_filter($this, $key);
 			}
 		}
 	}
@@ -74,4 +76,14 @@ class FilterForm extends ApplicationForm {
 		}
 		return array($error, $data);
 	}
+
+	function get_tab_fields() {
+		$out = $this->get_fields();
+		return array_diff_key($out, $this->top_fields);
+	}
+
+	function top_fields() {
+		return array_intersect_key($this->top_fields, $this->get_fields());
+	}
+
 }
