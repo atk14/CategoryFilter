@@ -13,6 +13,7 @@ Installation
 
     composer require atk14/category-filter
 
+    ln -s ../../vendor/atk14/category-filter/src/app/forms/filter_form.php app/forms/filter_form.php
     ln -s ../../vendor/atk14/category-filter/src/app/fields/filter_bool_field.php app/fields/filter_bool_field.php
     ln -s ../../vendor/atk14/category-filter/src/app/fields/filter_multiple_choice_field.php app/fields/filter_multiple_choice_field.php
     ln -s ../../vendor/atk14/category-filter/src/app/fields/filter_range_field.php app/fields/filter_range_field.php
