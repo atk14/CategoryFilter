@@ -1,9 +1,9 @@
 {
-        "name": "atk14/filter",
+        "name": "atk14/category-filter",
         "type": "library",
         "description": "",
         "keywords": [],
-        "homepage": "https://github.com/atk14/Filter",
+        "homepage": "https://github.com/atk14/CategoryFilter",
         "license": ["MIT"],
         "authors": [
                 {

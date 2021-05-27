@@ -1,7 +1,7 @@
-Filter
-======
+CategoryFilter
+==============
 
-[![Build Status](https://travis-ci.com/atk14/Filter.svg?branch=master)](https://travis-ci.com/atk14/Filter)
+[![Build Status](https://travis-ci.com/atk14/CategoryFilter.svg?branch=master)](https://travis-ci.com/atk14/CategoryFilter)
 
 Usage
 -----
@@ -11,7 +11,7 @@ TODO
 Installation
 ------------
 
-    composer require atk14/filter
+    composer require atk14/category-filter
 
 Testing
 -------
