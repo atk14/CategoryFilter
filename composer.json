@@ -20,6 +20,6 @@
                 "atk14/dbmole": "^1.1"
         },
         "autoload": {
-                "classmap": ["src"]
+                "classmap": ["src/lib","src/app/fields","src/app/forms"]
         }
 }
