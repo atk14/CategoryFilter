@@ -23,14 +23,14 @@ class FilterExistsSection extends FilterBoolSection {
 	function addConditions($values, $sql=null) {
 		if($values === 'yes') {
 			$sql = $this->getMainJoin($sql);
-			$sql->joinBy('JOIN');
+			$sql->setJoinBy('JOIN');
 			$sql->setActive(true);
 			$op = '';
 		} elseif($values === 'no') {
 			$sql = $this->getMainJoin($sql);
 			$sql->setActive(true);
-			$sql->joinBy('LEFT JOIN');
-			$this->filter->parsedSql->namedWhere(
+			$sql->setJoinBy('LEFT JOIN');
+			$this->filter->filteredSql->namedWhere(
 				$this->name,
 				parent::sqlBoolValue() . ' IS NULL'
 			);
