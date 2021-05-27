@@ -519,6 +519,11 @@ class Filter implements IteratorAggregate {
 						$section->options['landing_page']->enumLandingPages($section) :
 						[];
 		}, iterator_to_array($this));
-		return array_merge(...array_values($out));
+		//return array_merge(...array_values($out)); // it doesn't work in PHP5.5
+		$_out = [];
+		foreach($out as $ar){
+			$_out = array_merge($_out,$ar);
+		}
+		return $_out;
 	}
 }
