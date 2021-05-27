@@ -3,6 +3,7 @@ if ( !window.ATK14COMMON ) {
 }
 
 window.ATK14COMMON.filter_init = function( selector, onlyFields ) {
+			var $=window.$;
 			var $form = $( selector );
 			if ( !$form.length ) {
 				return;
@@ -37,9 +38,16 @@ window.ATK14COMMON.filter_init = function( selector, onlyFields ) {
 
 			if ( !onlyFields ) {
 				$form.on( "ajax:beforeSend", function() { form.filtering++; } );
-			}
 
-			$( ".js--active-filter" ).click( function() {
-				form.filtering++;
-			} );
+				$form.on( "click", ".js-filter-checkbox-label", function( e ) {
+					$( e.target ).closest( "div" ).children( "input" ).click();
+					e.preventDefault();
+				} );
+
+				$form.on( "click", ".nav-link", function( e ) {
+					$form.find( "input[name=active_filter_page]" ).val(
+						$( e.target ).data( "page" )
+					);
+				} );
+		}
 };
