@@ -9,26 +9,30 @@ class FilterMultipleChoiceField extends MultipleChoiceField implements IFilterFo
 				'filter_section' => $options['filter_section']
 			]),
 			"required" => false,
-			"multiple" => true
+			"ignore_invalid_choices" => 'partial',   //How to treat invalid values given by user
+							//true - do not consider as error if an invalid value is given
+							//'partial - don not cosider as error if an invalid value is given, if at least one given value is a valid choice
+							//false invalid value is error
 		];
 		$this->section = $options['filter_section'];
 		if(!key_exists('choices', $options) || $options['choices'] === null) {
 				$options["choices"] = $this->section->getChoices();
 		}
+		$this->ignore_invalid_choices = $options["ignore_invalid_choices"];
+		unset($options["ignore_invalid_choices"]);
 		parent::__construct($options);
-		$this->multiple = $options['multiple'];
 	}
 
 	function clean($values){
 		// Odfiltruji se pryc hodnoty, ktere ve filtru nejsou nebo jsou disablovane.
 		// Nam to totiz nevadi. Naopak. Kdyz se z filtru ztrati nejaka option, tak neprestanou fungovat zaindexovana URL.
-		if($values && !is_array($values)) {
-			$values = [ $values];
-		}
-		if($values) {
-			$values = array_flip(array_intersect_key(
+		if($values && $this->ignore_invalid_choices) {
+			$_values = array_flip(array_intersect_key(
 					array_flip($values), $this->choices
 			));
+			if($this->ignore_invalid_choices !== 'partial' || $_values) {
+				$values = $_values;
+			}
 		}
 		return parent::clean($values);
 	}
