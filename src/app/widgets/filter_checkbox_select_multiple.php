@@ -6,11 +6,21 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 	 * - **escape_labels** - escaping html in checkbox labels [default: true]
 	 *
 	 */
+
+	var $disabled_choices = [];
+
 	function __construct($options = array())
 	{
 		$options += array(
-			"escape_labels" => true
+			"escape_labels" => true,
+			"filter_section" => null,
+			"input_type" => 'select',
+			"ul_class" => 'list list--checkboxes',
+			"li_class" => 'list__item'
 		);
+		$this->li_class = $options['li_class'];
+		$this->ul_class = $options['ul_class'];
+		$this->input_type = $options['input_type'];
 		$this->escape_labels = $options["escape_labels"];
 		$this->filter_section = $options['filter_section'];
 		parent::__construct($options);
@@ -27,7 +37,7 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 
 		// pouzity markup vychazi z http://activa.localhost/public/styleguides/docs/4.1/components/forms/index.html#checkboxes-and-radios-1
 		$output = [];
-		$output[] = '<ul class="list list--checkboxes">';
+		$output[] = '<ul class="'.$this->ul_class.'">';
 		$choices = my_array_merge(array($this->choices, $options['choices']));
 
 
@@ -47,12 +57,16 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 				$id = "{$name}_".uniqid()."_$i";
 			}
 			$label = $this->escape_labels ? forms_htmlspecialchars($option_label) : $option_label;
+			if(isset($this->implicit_choices)) {
+				$values += array_flip($this->implicit_choices);
+			}
 			$checked = key_exists($option_value, $values);
 			$value = $checked ? ' checked':'';
 			$disabled = key_exists($option_value, $disableds)?' disabled':'';
-			$checkbox = "<input type='checkbox' name='{$name}[]'$value$disabled value=$option_value class='custom-control-input' id='$id'>";
+			$namestr = $name?"name='{$name}[]' ":"";
+			$checkbox = "<input type='checkbox' $namestr$value$disabled value=$option_value class='custom-control-input' id='$id'>";
 
-			$output[] = '<li class="list__item">';
+			$output[] = '<li class="'.$this->li_class.'">';
 			$output[] = "<div class=\"custom-control custom-checkbox\">";
 			if($disabled) {
 				//$output[] = "<li class='checkbox$disabled'>$checkbox <label>$label</label></li>";
@@ -85,9 +99,11 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 		return join("\n",$output);
 	}
 
-	var $disabled_choices = [];
-
 	function set_disabled_choices($choices){
 		$this->disabled_choices = $choices;
+	}
+
+	function set_implicit_choices($choices){
+		$this->implicit_choices = $choices;
 	}
 }

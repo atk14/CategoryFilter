@@ -60,12 +60,13 @@ class FilterMultipleChoiceField extends MultipleChoiceField implements IFilterFo
 	}
 
 	function update_by_filter($form, $key) {
-		$choices = $this->section->getChoices();
+		$choices = $this->section->getUpdatedChoices();
 		if(!$choices) {
 			unset($form->fields[$key]);
 			return;
 		}
-		$this->set_choices($this->section->getChoices());
+		$this->set_choices($choices);
+		$this->widget->set_implicit_choices($this->section->getImplicitChoices());
 		$this->set_disabled_choices($this->section->getDisabledChoices());
 	}
 }
