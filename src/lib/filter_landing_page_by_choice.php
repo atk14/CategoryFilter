@@ -22,14 +22,14 @@ class FilterLandingPageByChoice {
 		return true;
 	}
 
-	function label() {
-		return $this->_label(current($this->section->getValues()));
+	function label($arg=null) {
+		return $this->_label(current($this->section->getValues()), $null);
 	}
 
-	function _label($id) {
+	function _label($id, $arg=null) {
 		if($this->options['label_function']) {
 			$fce=$this->options['label_function'];
-			return $fce($id);
+			return $fce($id, $arg);
 		} else {
 			$label = $this->section->getChoiceLabels()[$id];
 			if($this->options['label_lowercase']) {
