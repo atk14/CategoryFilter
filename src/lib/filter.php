@@ -428,7 +428,7 @@ class Filter implements IteratorAggregate {
 			if($this->sections) {
 				$f = function($v) { return $v->getParams();};
 				$params = array_map($f, iterator_to_array($this));
-				$this->params = call_user_func_array('array_merge', $params);
+				$this->params = call_user_func_array('array_merge', array_values($params));
 			} else {
 				$this->params = [];
 			}
