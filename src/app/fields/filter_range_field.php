@@ -17,7 +17,7 @@ Class FilterRangeField extends RangeField implements IFilterFormField {
 		parent::__construct($options);
 	}
 
-	function update_by_filter() {
+	function update_by_filter($form, $key) {
 		$range = $this->section->getAvailableRange();
 		if($range) {
 				if($range['min'] == $range['max']) {
