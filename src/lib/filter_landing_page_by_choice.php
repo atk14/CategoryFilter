@@ -6,9 +6,9 @@ class FilterLandingPageByChoice {
 		$options += [
 			'label_string' => ' %s',
 			'label_lowercase' => false,
-			'label_function' => null,   //Function, that accepts choice key and returns the label for given choice. Possibly, it can accept
-																  //additional argument, passed to label. If it is not given, the label is created
-																  //according to the 'label_string' and 'label_lowercase' options
+			'label_function' => null,      //Function, that accepts choice key and returns the label for given choice. Possibly, it can accept
+			                               //additional argument, passed to label. If it is not given, the label is created
+			                               //according to the 'label_string' and 'label_lowercase' options
 			'special_label_function' => null, //If defined, the label with non-null argument is built by this function.
 		];
 		if($options['label_function'] && !$options['special_label_function'] &&
