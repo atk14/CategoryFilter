@@ -7,17 +7,20 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 	 *
 	 */
 
-	var $disabled_choices = [];
+	var $disabled_choices = [];	//grayed out choices
+	var $implicit_choices = [];	//always checked out choices
 
 	function __construct($options = array())
 	{
 		$options += array(
 			"escape_labels" => true,
+			"href_params" => null,
 			"filter_section" => null,
 			"input_type" => 'select',
 			"ul_class" => 'list list--checkboxes',
 			"li_class" => 'list__item'
 		);
+		$this->href_params = $options['href_params'];
 		$this->li_class = $options['li_class'];
 		$this->ul_class = $options['ul_class'];
 		$this->input_type = $options['input_type'];
@@ -48,8 +51,7 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 		$id = '';
 
 		global $HTTP_REQUEST;
-	  $params = $HTTP_REQUEST->getAllGetVars();
-
+		$params = is_array($this->href_params) ? $this->href_params : $HTTP_REQUEST->getAllGetVars();
 		foreach ($choices as $option_value => $option_label) {
 			if ($has_id) {
 				$id="{$options['attrs']['id']}_$i";
@@ -57,7 +59,7 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 				$id = "{$name}_".uniqid()."_$i";
 			}
 			$label = $this->escape_labels ? forms_htmlspecialchars($option_label) : $option_label;
-			if(isset($this->implicit_choices)) {
+			if($this->implicit_choices) {
 				$values += array_flip($this->implicit_choices);
 			}
 			$checked = key_exists($option_value, $values);
