@@ -33,6 +33,7 @@ use \SqlBuilder\MaterializedSqlTable;
 
 class Filter implements IteratorAggregate {
 	var $hasNoRecords = false;
+
 	function __construct($table, $options) {
 		$options += [
 			'id_field' => 'id',
@@ -48,7 +49,10 @@ class Filter implements IteratorAggregate {
 			'materialize_result' => true,    //Materialize dataset of all filtered records
 			'materialized_fields' => [],
 			'default_landing_page' => false,      //Default value for landing_page option of sections.
+			'widget_href_params' => null	      //href params for rendered widgets (default are the get params)
+																			//Can be set to ignore some "unimportant" params in the generated links
 		];
+
 		if(isset($options['fixed_filter_values'])) {
 			throw new Exception("Removed options fixed_filter_values and fixed_filters. Use ['section'][\$name]['fixed'|'fixed_values'])");
 		};

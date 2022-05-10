@@ -249,8 +249,15 @@ class FilterBaseSection {
 		return [
 			'filter_section' => $this,
 			'initial' => $this->values,
-			'required' => false
+			'required' => false,
+			'widget_options' => $this->getWidgetOptions(),
 		] + $this->options['form_field_options'];
+	}
+
+	function getWidgetOptions() {
+		return [
+			'href_params' => $this->filter->options['widget_href_params']
+		];
 	}
 
 	/**
