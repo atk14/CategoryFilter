@@ -81,7 +81,11 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 					$p[$option_value] = 'on';
 				}
 				$param = $params;
-				$param[$name] = array_keys($p);
+				if(count($p)) {
+					$param[$name] = array_keys($p);
+				} else {
+					unset($param[$name]);
+				}
 				$href = Atk14Url::BuildLink($param);
 				$rel = "";
 				if (preg_match("/\/\?.+$/", $href)) {
