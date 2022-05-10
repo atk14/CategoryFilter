@@ -299,6 +299,7 @@ class Filter implements IteratorAggregate {
 		if($this->hasNoRecords) {
 			return 0;
 		}
+
 		if(!$field) {
 			$field = $this->getIdField();
 		}
@@ -378,7 +379,6 @@ class Filter implements IteratorAggregate {
 		if(!$this->filtered) {
 			return $this->unfilteredSql->result($sqlOptions);
 		}
-
 
 		return $this->resultSql->result($sqlOptions);
 	}
@@ -484,6 +484,7 @@ class Filter implements IteratorAggregate {
 		});
 		return $sections;
 	}
+
 	function addAlwaysFalseCondition() {
 			$this->addCondition("1=0");
 			$this->hasNoRecords=true;

@@ -26,6 +26,7 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 			'disable_nonlimiting' => false
 		];
 		$options['form_field_options'] += [ 'label' => $name, 'choices' => [] ]; # options passed to createFormFields
+
 		parent::__construct($filter, $name, $options);
 		$this->choiceLabels = $this->options['form_field_options']['choices'];
 		$this->forceChoices = $this->options['force_choices'];
@@ -141,6 +142,7 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 		}
 		return $out;
 	}
+
 	/**
 	 * Return the array of choices, that should be disabled: the choices,
 	 * which selection results in empty (filtered) set and not chosen in filter.
@@ -186,11 +188,9 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 
 		if($this->options['counts_in_labels']) {
 			$available = $this->getAvailableCounts();
-
 			$disabled = array_diff_key(
 				array_flip($this->getPossibleChoices()), $available
 			);
-
 			if( $this->options['disable_nonlimiting'] ) {
 				$count = $this->filter->getRecordsCount();
 			}

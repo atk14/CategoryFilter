@@ -1,4 +1,5 @@
 <?php
+
 class FilterSection extends FilterChoiceSection {
 	function __construct($filter, $name, $options) {
 		$options += [
