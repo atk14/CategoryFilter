@@ -11,6 +11,7 @@ class FilterRangeSection extends FilterBaseSection {
 	function __construct($filter, $name, $options) {
 		$options = $options + [
 			'field' => null,                                    //e.g. price
+			'round' => true,
 
 			#forms framework support
 			'form_field' => 'FilterRangeField',                  # name of FormField to be created by createFormFields
@@ -163,9 +164,12 @@ class FilterRangeSection extends FilterBaseSection {
 	function getRangeOn($sql) {
 		$result = $sql->result($this->sqlOptions(true));
 		$field = $this->getSqlField();
+		$fields = $this->options['round'] ?
+			"FLOOR(MIN($field)) as min, CEIL(MAX($field)) as max" :
+			"MIN($field) as min, MAX($field) as max";
 
 		$sql = $result->select(
-				"MIN($field) as min, MAX($field) as max",
+				$fields,
 				['add_options' => false]
 			);
 		$out = $this->getDbMole()->selectFirstRow($sql, $result->bind);
