@@ -16,14 +16,12 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 			"escape_labels" => true,
 			"href_params" => null,
 			"filter_section" => null,
-			"input_type" => 'select',
 			"ul_class" => 'list list--checkboxes',
 			"li_class" => 'list__item'
 		);
 		$this->href_params = $options['href_params'];
 		$this->li_class = $options['li_class'];
 		$this->ul_class = $options['ul_class'];
-		$this->input_type = $options['input_type'];
 		$this->escape_labels = $options["escape_labels"];
 		$this->filter_section = $options['filter_section'];
 		parent::__construct($options);
