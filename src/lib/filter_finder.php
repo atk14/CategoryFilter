@@ -16,7 +16,8 @@ class FilterFinder extends TableRecord_Finder {
       "use_cache" => TABLERECORD_USE_CACHE_BY_DEFAULT,
 			"sql_options" => [],
 			"postprocess" => null,
-			"pager" => null  #AjaxPager object - if it is set, it's handled automaticly
+			"pager" => null,                         //AjaxPager object to read the order and limit from
+			"pager_resolve_xhr_request" => true,    //If true, the pager will resolve XHR request (change template etc.)
 		);
 
 		$sql_options = $options['sql_options'];
@@ -49,7 +50,7 @@ class FilterFinder extends TableRecord_Finder {
       "use_cache" => $options['use_cache']
 		),$dbmole);
 
-		if($this->getPager()) {
+		if($this->getPager() && $this->options['pager_resolve_xhr_request']) {
 			$this->getPager()->xhr($this);
 		}
 	}
