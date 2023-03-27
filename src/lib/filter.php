@@ -10,10 +10,10 @@ use \SqlBuilder\MaterializedSqlTable;
 	);
 	$filter->addJoin('JOIN category_cards cc ON (cc.card_id = cards.id) JOIN category').where('category.id = cc.category_id');
 	$filter->addJoin('brands').where('cards.brand_id = brands.id');
-	$filter->addSection(new FilterSection('brands', array(
+	$filter->add(new FilterSection('brands', array(
 			'join' => 'brands'
 	)));
-	$filter->addSection(new FilterSection('designers', array(
+	$filter->add(new FilterSection('designers', array(
 			'join' => $filter->addJoin('designers').where('cards.designer_id = designers.id')
 	)));
 
