@@ -13,7 +13,7 @@
         ],
         "require": {
                 "php": ">=7.0",
-                "atk14/range-field": "^0.1"
+                "atk14/range-field": "^0.2"
         },
         "require-dev": {
                 "atk14/tester": "*",
