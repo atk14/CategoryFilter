@@ -44,6 +44,7 @@ class Filter implements IteratorAggregate {
 			'order' => null,
 			'prefix' => 'f_',
 			'dbmole' => '',
+			'sort_by_name' => true,
 			'model' => null,                 //Name of model for created finder
 			'materialize' => true,           //Materialize dataset of all possible records
 			'materialize_result' => true,    //Materialize dataset of all filtered records
@@ -469,14 +470,20 @@ class Filter implements IteratorAggregate {
 	function visibleSections() {
 		$sections = $this->sections;
 		$sections = array_filter($sections, function($s) {return $s->isVisible();});
-		usort($sections, function($a, $b) {
-			if($a->getRank() == $b->getRank()) {
-				$a = $a->getName();
-				$b = $b->getName();
-			} else {
-				$a = $a->getRank();
-				$b = $b->getRank();
-			}
+		$order = array_flip(array_map( function($v) { return spl_object_id($v);} , array_values($sections)));
+		if($this->options['sort_by_name']) {
+			$fce=function($o) use ($order) {
+				return [ $o->getRank(), $o->getName(), $order[spl_object_id($o)] ];
+			};
+		}	else {
+			$fce=function($o) use ($order) {
+				return [ $o->getRank(), $order[spl_object_id($o)] ];
+			};
+		}
+
+		usort($sections, function($a, $b) use ($order, $fce) {
+			$a=$fce($a);
+			$b=$fce($b);
 			if($a == $b) {
 				return 0;
 			}
