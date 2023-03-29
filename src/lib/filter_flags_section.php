@@ -90,6 +90,9 @@ class FilterFlagsSection extends FilterChoiceSection {
 	}
 
 	function getChoicesOn($sql) {
+		if(!$this->visibleFields) {
+			return [];
+		}
 		$result = $sql->result($this->sqlOptions(!$this->andOperator));
 		foreach($this->visibleFields as $k => $v) {
 				$fields[] = "bool_or($v) AS $k";
@@ -105,6 +108,9 @@ class FilterFlagsSection extends FilterChoiceSection {
 	}
 
 	function getCountsOn($sql, $where=null) {
+		if(!$this->visibleFields) {
+			return [];
+		}
 		if($where) {
 			$where = " AND $where";
 		}
