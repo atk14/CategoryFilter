@@ -470,14 +470,15 @@ class Filter implements IteratorAggregate {
 	function visibleSections() {
 		$sections = $this->sections;
 		$sections = array_filter($sections, function($s) {return $s->isVisible();});
-		$order = array_flip(array_map( function($v) { return spl_object_id($v);} , array_values($sections)));
+		$id = function_exists('spl_object_id')?'spl_object_id':'spl_object_hash';
+		$order = array_flip(array_map( function($v) use($id) { return $id($v);} , array_values($sections)));
 		if($this->options['sort_by_name']) {
-			$fce=function($o) use ($order) {
-				return [ $o->getRank(), $o->getName(), $order[spl_object_id($o)] ];
+			$fce=function($o) use ($order, $id) {
+				return [ $o->getRank(), $o->getName(), $order[$id($o)] ];
 			};
 		}	else {
-			$fce=function($o) use ($order) {
-				return [ $o->getRank(), $order[spl_object_id($o)] ];
+			$fce=function($o) use ($order, $id) {
+				return [ $o->getRank(), $order[$id($o)] ];
 			};
 		}
 
