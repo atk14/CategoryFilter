@@ -124,7 +124,13 @@ class Filter implements IteratorAggregate {
 			$this->resultSql = clone $this->resultSql;
 			$this->unfilteredSql->pattern = $this->resultSql;
 		}
-		$this->sections=array_map(function($v) {return clone $v;}, $this->sections);
+		$this->visibleSections = null;
+		$this->sections=array_map(function($v) 
+					{
+						$out=clone $v;
+						$out->filter = $this;
+						return $out;
+					}, $this->sections);
 	}
 
 	function getModel() {
