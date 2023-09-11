@@ -95,7 +95,7 @@ class FilterFlagsSection extends FilterChoiceSection {
 		}
 		$result = $sql->result($this->sqlOptions(!$this->andOperator));
 		foreach($this->visibleFields as $k => $v) {
-				$fields[] = "bool_or($v) AS $k";
+				$fields[] = "bool_or($v) AS \"$k\"";
 		}
 		$sql = $result->select(implode(',', $fields), false);
 		$out = $this->getDbmole()->selectRow($sql, $result->bind);
@@ -115,8 +115,8 @@ class FilterFlagsSection extends FilterChoiceSection {
 			$where = " AND $where";
 		}
 		foreach($this->getVisibleFields() as $k => $v) {
-			$fields[] = "($v$where)::integer AS $k";
-			$results[] = "sum($k) AS $k";
+			$fields[] = "($v$where)::integer AS \"$k\"";
+			$results[] = "sum(\"$k\") AS \"$k\"";
 		}
 		$field = $this->filter->getIdField();
 		$fields[] = "$field AS __id";
