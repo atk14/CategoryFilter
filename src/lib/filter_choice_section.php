@@ -1,4 +1,11 @@
 <?php
+class InvalidChoiceException extends FilterException {
+	function __construct($section, $value, $msg) {
+		$this->section=$section;
+		$this->value=$value;
+		parent::__construct($msg);
+	}
+}
 
 /**
  * Section of filter, that has checkboxes
@@ -19,6 +26,7 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 			#commonly no need to redefine
 			'condition_over_subtable' => null, //whether the condition is oversubtable or not - default is (bool) join
 			'multiple' => true,                //user can select multiple values
+			'unknown_choices' => null,			   //true => an error on impossible value, 'discard', 'exception'
 
 			'counts_in_labels' => true,
 			'label_string' => '%s (%s)',
@@ -254,6 +262,19 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 		} else {
 			$this->values = $values[$pname];
 		}
+		if($this->options['unknown_choices'] && $this->values) {
+			$possible = $this->getPossibleChoices();
+			$diff = array_diff_key(array_flip($this->values),array_flip($possible));
+			if($diff) {
+				$this->values=array_flip(array_intersect_key(array_flip($this->values),array_flip($possible)));
+				switch($this->options['unknown_choices']) {
+					case 'exception':
+						$diff=implode(', ', array_flip($diff));
+						throw new InvalidChoiceException($this, $diff, "The following value(s): {$diff} are not allowed for {$this->name}");
+				}
+			}
+		}
+
 		return $this->values;
 	}
 

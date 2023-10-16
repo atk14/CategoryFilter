@@ -31,6 +31,8 @@ use \SqlBuilder\MaterializedSqlTable;
 	)
  */
 
+class FilterException extends Exception {};
+
 class Filter implements IteratorAggregate {
 	var $hasNoRecords = false;
 
@@ -270,10 +272,18 @@ class Filter implements IteratorAggregate {
 		$this->params = null;
 
 		$this->filtered = [];
+		$exception = null;
 		foreach($this as $name => $section) {
+			try {
 			if($section->parse($params, $this->filteredSql)) {
 				$this->filtered[$name] = true;
 			}
+			} catch(FilterException $e) {
+				$exception=$e;
+			}
+		}
+		if($exception) {
+			throw $exception;
 		}
 	}
 
