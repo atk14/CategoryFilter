@@ -4,10 +4,16 @@ class FilterMultipleChoiceField extends MultipleChoiceField implements IFilterFo
 	var $disabled_choices = array();
 
 	function __construct($options = []){
+		$this->section = $options['filter_section'];
+		$woptions = [];
+		if(isset($options['widget_options'])) {
+			$woptions = $options['widget_options'];
+		} else {
+			$woptions = [];
+		}
+		$woptions['filter_section'] = $this->section;
 		$options += [
-			"widget" => new FilterCheckboxSelectMultiple([
-				'filter_section' => $options['filter_section']
-			]),
+			"widget" => new FilterCheckboxSelectMultiple($woptions),
 			"required" => false,
 			"ignore_invalid_choices" => 'partial',   //How to treat invalid values given by user
 							//true - do not consider as error if an invalid value is given

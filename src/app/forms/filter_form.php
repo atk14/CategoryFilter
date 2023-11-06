@@ -8,6 +8,7 @@ class FilterForm extends ApplicationForm {
 		$this->set_button_text(_("Filtrovat"));
 		$this->set_attr('id', 'filter_form');
 		$this->set_attr('autocomplete', 'off');
+		$this->set_method('get');
 
 		$this->top_fields = ['f_flags' => 'f_flags'];
 	}
@@ -15,7 +16,7 @@ class FilterForm extends ApplicationForm {
 	function set_up_filter($filter, $params, $options = []) {
 		$options += [
 			'action' => null,
-			'update_choices' => true
+			'update_choices' => true,
 		];
 
 		if($options['action']) {
@@ -23,6 +24,7 @@ class FilterForm extends ApplicationForm {
 		}
 		$this->init_by_filter($filter);
 		$this->parse_params($params);
+
 		//in some xhr requests it doesn't need to be done
 		if($options['update_choices']) {
 			$this->update_choices($params);
@@ -36,7 +38,7 @@ class FilterForm extends ApplicationForm {
 		$this->filter = $filter;
 
 		$add = [];
-		foreach($filter->sections as $section) {
+		foreach($filter as $section) {
 			$add += $section->createFormFields($this);
 		}
 		foreach($add as $name => $field) {
