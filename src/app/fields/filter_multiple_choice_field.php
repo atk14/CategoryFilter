@@ -20,7 +20,6 @@ class FilterMultipleChoiceField extends MultipleChoiceField implements IFilterFo
 							//'partial - don not cosider as error if an invalid value is given, if at least one given value is a valid choice
 							//false invalid value is error
 		];
-		$this->section = $options['filter_section'];
 		if(!key_exists('choices', $options) || $options['choices'] === null) {
 				$options["choices"] = $this->section->getChoices();
 		}
@@ -32,6 +31,9 @@ class FilterMultipleChoiceField extends MultipleChoiceField implements IFilterFo
 	function clean($values){
 		// Odfiltruji se pryc hodnoty, ktere ve filtru nejsou nebo jsou disablovane.
 		// Nam to totiz nevadi. Naopak. Kdyz se z filtru ztrati nejaka option, tak neprestanou fungovat zaindexovana URL.
+		if($values && !is_array($values)) {
+			$values=[$values];
+		}
 		if($values && $this->ignore_invalid_choices) {
 			$_values = array_flip(array_intersect_key(
 					array_flip($values), $this->choices
