@@ -14,7 +14,7 @@
         "require": {
                 "php": ">=7.0",
                 "atk14/range-field": "^0.2",
-                "atk14/sql-builder": ">=3"
+                "atk14/sql-builder": ">=4.4"
 
         },
         "require-dev": {

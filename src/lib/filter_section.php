@@ -127,7 +127,10 @@ class FilterSection extends FilterChoiceSection {
 
 	function getConditions($values) {
 		$condition = "{$this->getSqlField()} IN :{$this->name}";
-		return [$condition, [":{$this->name}" => $values]];
+		return [
+			'condition' => $condition,
+			'bind' => [":{$this->name}" => $values]
+		];
 	}
 
 	/**

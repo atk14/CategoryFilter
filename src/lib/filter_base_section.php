@@ -30,6 +30,7 @@ class FilterBaseSection {
 									object: if just one landing page object from all sections matches, it is a landing page. */
 		];
 
+
 		$this->visible = $options['visible'];
 
 		foreach(array_diff_key($options, ['form_field' => false, 'form_field_options' => false]) as $k=>$v) {
@@ -53,6 +54,9 @@ class FilterBaseSection {
 			$this->joins  = $join;  //joins, that should be enabled when queries for the section are run
 		} else {
 			$this->joins = [];
+		}
+		if(!key_exists('main_join', $options)) {
+			$this->options['main_join'] = $this->joins ? reset($this->joins) : null;
 		}
 
 		$this->filter->add($this);
@@ -164,8 +168,8 @@ class FilterBaseSection {
 		$out = [
 			'active_join' => $this->joins,
 		];
-		if($this->joins) {
-			$out['override_join'] = [ reset($this->joins) => 'JOIN'];
+		if($mjn = $this->getMainJoinName()) {
+			$out['override_join'] = [ $mjn => 'JOIN'];
 		}
 		if($disable_where) {
 			$out['disable_where'] = $this->name;
@@ -173,13 +177,17 @@ class FilterBaseSection {
 		return $out;
 	}
 
+	function getMainJoinName() {
+		return $this->options['main_join'];
+	}
+
 	/**
 	 * Returns SQLCondition object, where the conditions should be applied.
 	 */
 	function getMainJoin($sql=null) {
 		$sql = $sql?:$this->filter->filteredSql;
-		if($sql && $this->joins) {
-			$sql = $sql->getJoin(reset($this->joins));
+		if($sql && ($mjn = $this->getMainJoinName())) {
+			$sql=$sql->getJoin($mjn);
 		}
 		return $sql;
 	}
@@ -280,10 +288,22 @@ class FilterBaseSection {
 	 **/
 	function addConditions($values, $sql=null) {
 		if(!$values) { return; }
-		list($condition, $bind) = $this->getConditions($values);
-		if($condition) {
-			$sql = $this->getMainJoin($sql);
-			$sql->namedWhere($this->name, $condition)->bind($bind);
+		$c = $this->getConditions($values);
+		$sql = $this->filter->filteredSql;
+
+		if($condition = $c['condition']) {
+			$sql->namedWhere($this->name, $condition);
+		}
+
+		$joins = $condition['joins'] ?? [ $this->getMainJoinName() ];
+		if($joins) {
+			foreach($joins as $j) {
+				$sql->getJoin($j)->namedWhere($this->name, '');
+			}
+		}
+
+		if($bind=$c['bind']) {
+			$sql->bind($bind);
 		}
 	}
 }

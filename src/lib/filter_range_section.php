@@ -155,7 +155,10 @@ class FilterRangeSection extends FilterBaseSection {
 		} else {
 				$condition = null;
 		}
-		return [ $condition, $bind ];
+		return [
+			'condition' => $condition,
+			'bind' => $bind
+		];
 	}
 
 	/**

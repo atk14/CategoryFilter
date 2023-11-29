@@ -95,6 +95,9 @@ class FilterFlagsSection extends FilterChoiceSection {
 		}
 		$result = $sql->result($this->sqlOptions(!$this->andOperator));
 		foreach($this->visibleFields as $k => $v) {
+				if(is_array($v)) {
+					$v=$v['condition'];
+				}
 				$fields[] = "bool_or($v) AS \"$k\"";
 		}
 		$sql = $result->select(implode(',', $fields), false);
@@ -104,7 +107,9 @@ class FilterFlagsSection extends FilterChoiceSection {
 	}
 
 	function getUsedFields() {
-		return array_values(\SqlBuilder\FieldsUtils::StripFields($this->fields));
+		$fields = $this->fields;
+		$fields = array_map(function($v) { return is_array($v)?$v['condition']:$v; }, $fields);
+		return array_values(\SqlBuilder\FieldsUtils::StripFields($fields));
 	}
 
 	function getCountsOn($sql, $where=null) {
@@ -115,6 +120,7 @@ class FilterFlagsSection extends FilterChoiceSection {
 			$where = " AND $where";
 		}
 		foreach($this->getVisibleFields() as $k => $v) {
+			if(is_array($v)) { $v=$v['condition']; };
 			$fields[] = "($v$where)::integer AS \"$k\"";
 			$results[] = "sum(\"$k\") AS \"$k\"";
 		}
@@ -128,8 +134,24 @@ class FilterFlagsSection extends FilterChoiceSection {
 
 	function getConditions($values) {
 		$values = array_intersect_key( $this->fields, array_flip($values) );
+		$joins = [];
+		foreach($values as &$v) {
+			if(is_array($v)) {
+				$j = $v['join'] ?? [];
+				if(!is_array($j)) $j=[$j];
+				$joins = $joins + array_flip($j);
+				$v=$v['condition'];
+			} else {
+				$joins[$this->getMainJoinName()] = true;
+			}
+		}
+
 		if(!$values) { return; }
 		$conditions = "(" . implode(" {$this->operator}  ", $values). ")";
-		return [$conditions, []];
+		$joins = array_filter(array_keys($joins));
+		return [
+			'condition' => $conditions,
+			'joins'     => $joins
+		];
 	}
 }
