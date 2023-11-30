@@ -295,7 +295,7 @@ class FilterBaseSection {
 			$sql->namedWhere($this->name, $condition);
 		}
 
-		$joins = $condition['joins'] ?? [ $this->getMainJoinName() ];
+		$joins = $c['joins'] ?? [ $this->getMainJoinName() ];
 		if($joins) {
 			foreach($joins as $j) {
 				$sql->getJoin($j)->namedWhere($this->name, '');
