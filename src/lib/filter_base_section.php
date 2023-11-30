@@ -302,7 +302,8 @@ class FilterBaseSection {
 			}
 		}
 
-		if($bind=$c['bind']) {
+		if(isset($c['bind']) && $c['bind']) {
+			$bind = $c['bind'];
 			$sql->bind($bind);
 		}
 	}
