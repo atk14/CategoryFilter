@@ -28,7 +28,7 @@ class FilterBoolField extends ChoiceField implements IFilterFormField {
 		return array_keys($this->choices);
 	}
 
-	function update_by_filter() {
+	function update_by_filter($form, $key) {
 			if($this->disabled) { return ; }
 			$counts = $this->section->getCounts();
 			if(count($counts) > 1) {
