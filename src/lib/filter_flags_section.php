@@ -3,7 +3,7 @@ class FilterFlagsSection extends FilterChoiceSection {
 /**
  *       FilterSection for flags - boolean values given by SQL expression
  *
- *       $flags = new FilterFlagsSection($this, 'flags', [
+ *       $flags = new FilterFlagsSection($filter, 'flags', [
  *         'join' =>  $this->addJoin("product pp")->where("main.product_id = pp.id"),
  *         'operator' => 'AND',
  *         'form_choices' => [
