@@ -296,6 +296,7 @@ class FilterBaseSection {
 		}
 
 		$joins = $c['joins'] ?? [ $this->getMainJoinName() ];
+		$joins = array_filter($joins); // filtering out null values
 		if($joins) {
 			foreach($joins as $j) {
 				$sql->getJoin($j)->namedWhere($this->name, '');
