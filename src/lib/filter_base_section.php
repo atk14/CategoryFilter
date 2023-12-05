@@ -289,7 +289,7 @@ class FilterBaseSection {
 	function addConditions($values, $sql=null) {
 		if(!$values) { return; }
 		$c = $this->getConditions($values);
-		$sql = $this->filter->filteredSql;
+		$sql = $sql?:$this->filter->filteredSql;
 
 		if($condition = $c['condition']) {
 			$sql->namedWhere($this->name, $condition);
