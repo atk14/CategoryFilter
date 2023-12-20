@@ -291,16 +291,26 @@ class FilterBaseSection {
 		$c = $this->getConditions($values);
 		$sql = $sql?:$this->filter->filteredSql;
 
-		if($condition = $c['condition']) {
-			$sql->namedWhere($this->name, $condition);
-		}
+		$condition = $c['condition'];
 
 		$joins = $c['joins'] ?? [ $this->getMainJoinName() ];
 		$joins = array_filter($joins); // filtering out null values
 		if($joins) {
-			foreach($joins as $j) {
-				$sql->getJoin($j)->namedWhere($this->name, '');
+			if(count($joins) <= 1) {
+				if($condition) {
+					$j = reset($joins);
+					$sql->getJoin($j)->namedWhere($this->name, $condition);
+					$condition=false;
+				}
+			} else {
+				foreach($joins as $j) {
+					$sql->getJoin($j)->namedWhere($this->name, '');
+				}
 			}
+		}
+
+		if($condition) {
+			$sql->namedWhere($this->name, $condition);
 		}
 
 		if(isset($c['bind']) && $c['bind']) {
