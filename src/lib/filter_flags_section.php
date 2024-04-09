@@ -147,7 +147,7 @@ class FilterFlagsSection extends FilterChoiceSection {
 		}
 
 		if(!$values) { return; }
-		$conditions = "(" . implode(" {$this->operator}  ", $values). ")";
+		$conditions = "((" . implode(") {$this->operator}  (", $values). "))";
 		$joins = array_filter(array_keys($joins));
 		return [
 			'condition' => $conditions,
