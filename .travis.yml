@@ -26,9 +26,10 @@ services:
 
 before_script:
   - composer update --dev
-  - sudo -u postgres psql -c "CREATE DATABASE test;" -U postgres
-  - sudo -u postgres psql -c "CREATE USER test WITH ENCRYPTED PASSWORD 'test'; GRANT ALL PRIVILEGES ON DATABASE test TO test;" -U postgres
-  - sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE test TO test" -U postgres
+  - sudo -u postgres psql -c "CREATE DATABASE test;" -U postgres 2>&1
+  - sudo -u postgres psql -c "CREATE USER test WITH ENCRYPTED PASSWORD 'test'" -U postgres 2>&1
+  - sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE test TO test" -U postgres 2>&1
+  - sudo -u postgres psql -c "GRANT ALL ON SCHEMA public TO test" -U postgres test 2>&1
 
 script:
   - cd test && ../vendor/bin/run_unit_tests
