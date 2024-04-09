@@ -8,6 +8,12 @@ class FilterFinder extends TableRecord_Finder {
 
 	const DEFAULT_ORDER = '('; #a value that is not valid
 
+	protected $filter;
+	protected $options;
+	protected $result;
+	protected $query;
+	protected $bind;
+
 	function __construct($filter, $options = []) {
 		$this->filter = $filter;
 		$this->_Records = null;
