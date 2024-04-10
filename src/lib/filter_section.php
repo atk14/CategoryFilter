@@ -1,6 +1,7 @@
 <?php
 
 class FilterSection extends FilterChoiceSection {
+
 	function __construct($filter, $name, $options) {
 		$options += [
 			'field' => null,				//e.g. 'brand_id' -- choices will be the possible values of the field
@@ -125,7 +126,15 @@ class FilterSection extends FilterChoiceSection {
 		return $field;
 	}
 
+	/**
+	 * Add conditions to ParsedSqlResult based on given values
+	 *
+	 *	if($c = $section->getConditions(["on_stock"])){
+	 *		// there's something to filter with in $c
+	 *	}
+	 */
 	function getConditions($values) {
+		if(!$values){ return null; }
 		$condition = "{$this->getSqlField()} IN :{$this->name}";
 		return [
 			'condition' => $condition,

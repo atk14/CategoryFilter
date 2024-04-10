@@ -34,6 +34,7 @@ use \SqlBuilder\MaterializedSqlTable;
 class FilterException extends Exception {};
 
 class Filter implements IteratorAggregate {
+
 	var $hasNoRecords = false;
 
 	function __construct($table, $options) {
@@ -245,7 +246,7 @@ class Filter implements IteratorAggregate {
 
 	/**
 	 * Parse params and generate $this->filteredSql object with propper conditions
-	 * $params = $form->validate();
+	 * $params = $form->validate(); // e.g. ["f_flags" => ["on_stock"]]
 	 * $filter->parse($params);
 	 * $finder = new FilterFinder($filter);
 	 * $finder->getRecords() ....
@@ -258,10 +259,12 @@ class Filter implements IteratorAggregate {
 		$this->resultSql = new MaterializedSqlTable(
 			$this->filteredSql,
 			$this->getDbMole(),
-			function() { return [
-				'fields' => $this->getMaterializedFields( $this->unfilteredSql->isMaterialized()),
-				'table_name_pattern' => 'materialized_filter'
-			]; },
+			function() {
+				return [
+					'fields' => $this->getMaterializedFields( $this->unfilteredSql->isMaterialized()),
+					'table_name_pattern' => 'materialized_filter'
+				];
+			},
 			[
 				'materialize' => $this->options['materialize_result'],
 			]
@@ -275,11 +278,11 @@ class Filter implements IteratorAggregate {
 		$exception = null;
 		foreach($this as $name => $section) {
 			try {
-			if($section->parse($params, $this->filteredSql)) {
-				$this->filtered[$name] = true;
-			}
+				if($section->parse($params, $this->filteredSql)) {
+					$this->filtered[$name] = true;
+				}
 			} catch(FilterException $e) {
-				$exception=$e;
+				$exception = $e;
 			}
 		}
 		if($exception) {
@@ -298,7 +301,7 @@ class Filter implements IteratorAggregate {
 	 *
 	 */
 	function isFilteredExcept($section) {
-		return count($this->filtered) >= (isset($this->filtered[$section])?2:1);
+		return count($this->filtered) >= (isset($this->filtered[$section]) ? 2 : 1);
 	}
 
 	/**

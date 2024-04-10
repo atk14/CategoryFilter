@@ -1,5 +1,6 @@
 <?php
 class FilterBaseSection {
+
 	/**
 	 * Base class for all sections
 	 */
@@ -184,7 +185,7 @@ class FilterBaseSection {
 	/**
 	 * Returns SQLCondition object, where the conditions should be applied.
 	 */
-	function getMainJoin($sql=null) {
+	function getMainJoin($sql = null) {
 		$sql = $sql?:$this->filter->filteredSql;
 		if($sql && ($mjn = $this->getMainJoinName())) {
 			$sql=$sql->getJoin($mjn);
@@ -196,7 +197,7 @@ class FilterBaseSection {
 	Return params as they should appear in SQL
 	*/
 	function getParams() {
-		return $this->values?[$this->getParamName() => $this->values]:[];
+		return $this->values ? [$this->getParamName() => $this->values] : [];
 	}
 
 	/**
@@ -209,12 +210,13 @@ class FilterBaseSection {
 	/*
 	 * Parse values and add apropriate conditions (e.g. from form)
 	 * Called by Filter::parse()
+	 *
+	 * return bool
 	 */
 	function parse($values) {
 		$this->parseValues($values);
 		$values = $this->getValues();
-		$this->addConditions($values);
-		return $this->values;
+		return $this->addConditions($values);
 	}
 
 	/**
@@ -285,22 +287,26 @@ class FilterBaseSection {
 
 	/**
 	 * Add conditions to ParsedSqlResult based on given values
+	 *
+	 *	if($section->addConditions($values)){
+	 *		// something was added to the conditions
+	 *	}
 	 **/
-	function addConditions($values, $sql=null) {
-		if(!$values) { return; }
+	function addConditions($values, $sql = null) {
 		$c = $this->getConditions($values);
-		$sql = $sql?:$this->filter->filteredSql;
+		if(!$c){ return false; }
+		$sql = $sql ?: $this->filter->filteredSql;
 
 		$condition = $c['condition'];
 
-		$joins = $c['joins'] ?? [ $this->getMainJoinName() ];
+		$joins = $c['joins'] ?? [$this->getMainJoinName()];
 		$joins = array_filter($joins); // filtering out null values
 		if($joins) {
 			if(count($joins) <= 1) {
 				if($condition) {
 					$j = reset($joins);
 					$sql->getJoin($j)->namedWhere($this->name, $condition);
-					$condition=false;
+					$condition = false;
 				}
 			} else {
 				foreach($joins as $j) {
@@ -317,5 +323,7 @@ class FilterBaseSection {
 			$bind = $c['bind'];
 			$sql->bind($bind);
 		}
+
+		return true;
 	}
 }

@@ -77,13 +77,12 @@ class FilterBoolSection extends FilterBaseSection {
 		$pname = $this->getParamName();
 		$this->counts = null;
 		if(!key_exists($pname, $values)) {
-			$this->values='';
+			$this->values = '';
 			return false;
 		} else {
 			$this->values = $values[$pname];
 		}
-		$this->addConditions($this->values);
-		return $this->values !== '';
+		return $this->addConditions($this->values);
 	}
 
 	function sqlBoolValue() {
@@ -94,7 +93,7 @@ class FilterBoolSection extends FilterBaseSection {
 		return $field;
 	}
 
-	function sqlOptions($sql=null) {
+	function sqlOptions($sql = null) {
 		return [
 			'sql_options' => [
 					'group' => 1,
@@ -139,16 +138,21 @@ class FilterBoolSection extends FilterBaseSection {
 			];
 		}
 		if(count($result)) {
-				return [ key($result) == 't'?'yes':'no' => current($result) ];
+				return [(key($result) == 't' ? 'yes' : 'no') => current($result)];
 		}
 		return ['' => 0 ];
 	}
 
 	/***
 	 * Add conditions to ParsedSqlResult based on given values
+	 *
+	 *	if($section->addConditions($values)){
+	 *		// something was added to the conditions
+	 *	}
 	 **/
-	function addConditions($values, $sql=null) {
-		if(!$values) { return; }
+	function addConditions($values, $sql = null) {
+		if(!$values) { return false; }
+
 		$op = $values === 'yes' ? '' : 'NOT ';
 
 		$sql = $this->getMainJoin($sql);
@@ -156,6 +160,8 @@ class FilterBoolSection extends FilterBaseSection {
 			$this->name,
 			$op . $this->sqlBoolValue()
 		);
+
+		return true;
 	}
 
 	/**

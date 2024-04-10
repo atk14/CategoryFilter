@@ -20,12 +20,20 @@ class FilterExistsSection extends FilterBoolSection {
 		return $out;
 	}
 
-	function addConditions($values, $sql=null) {
+	/***
+	 * Add conditions to ParsedSqlResult based on given values
+	 *
+	 *	if($section->addConditions($values)){
+	 *		// something was added to the conditions
+	 *	}
+	 */
+	function addConditions($values, $sql = null) {
 		if($values === 'yes') {
 			$sql = $this->getMainJoin($sql);
 			$sql->setJoinBy('JOIN');
 			$sql->setActive(true);
 			$op = '';
+			return true;
 		} elseif($values === 'no') {
 			$sql = $this->getMainJoin($sql);
 			$sql->setActive(true);
@@ -34,7 +42,8 @@ class FilterExistsSection extends FilterBoolSection {
 				$this->name,
 				parent::sqlBoolValue() . ' IS NULL'
 			);
+			return true;
 		}
+		return false;
 	}
-
 }

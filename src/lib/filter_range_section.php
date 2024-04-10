@@ -134,17 +134,21 @@ class FilterRangeSection extends FilterBaseSection {
 
 	/**
 	 * Add conditions to ParsedSqlResult based on given values
-	 **/
+	 *
+	 *	if($c = $section->getConditions($range)){
+	 *		// there's something to filter with in $c
+	 *	}
+	 */
 	function getConditions($values) {
-		if(!$values) { return [null,null]; }
-		if(!$ar=$this->getPossibleRange()) { return [null,null]; }
+		if(!$values) { return null; }
+		if(!$ar = $this->getPossibleRange()) { return null; }
 		$values += $ar;
 
 		$bind = [];
 		if(key_exists('min', $values)) {
 			$bind[":{$this->name}_min"] = $values['min'];
 			if(key_exists('max', $values)) {
-				$condition="{$this->getSqlField()} BETWEEN :{$this->name}_min AND :{$this->name}_max";
+				$condition = "{$this->getSqlField()} BETWEEN :{$this->name}_min AND :{$this->name}_max";
 				$bind[":{$this->name}_max"] = $values['max'];
 			} else {
 				$condition = "{$this->getSqlField()} >= :{$this->name}_min";
@@ -153,7 +157,7 @@ class FilterRangeSection extends FilterBaseSection {
 				$bind[":{$this->name}_max"] = $values['max'];
 				$condition = "{$this->getSqlField()} <= :{$this->name}_max";
 		} else {
-				$condition = null;
+				return null;
 		}
 		return [
 			'condition' => $condition,

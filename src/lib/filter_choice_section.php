@@ -1,8 +1,9 @@
 <?php
 class InvalidChoiceException extends FilterException {
+
 	function __construct($section, $value, $msg) {
-		$this->section=$section;
-		$this->value=$value;
+		$this->section = $section;
+		$this->value = $value;
 		parent::__construct($msg);
 	}
 }
@@ -54,6 +55,8 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 	 * for at least one record exists, where no filter is applied.
 	 * $section->getPossibleChoices();
 	 * >> [ 1, 6, 15 ]
+	 * // or
+	 * >> [ "on_stock", "unavailable" ]
 	 */
 	function getPossibleChoices() {
 		if(!$this->possibleChoices) {
@@ -134,13 +137,17 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 			}
 		} else {
 
-			$options=$this->sqlOptions();
+			$options = $this->sqlOptions();
 			$result = $sql->result($options);
-			$out=$this->getCountsOn($result);
+			$out = $this->getCountsOn($result);
 		}
 		return $out;
 	}
 
+	/**
+	 *
+	 *	$section->getChoices(); // ["red" => "Red color", "blue" => "Blue color"]
+	 */
 	function getChoices() {
 		$out = $this->getChoiceLabels();
 		if(!$this->forceChoices) {
@@ -154,7 +161,9 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 	/**
 	 * Return the array of choices, that should be disabled: the choices,
 	 * which selection results in empty (filtered) set and not chosen in filter.
-   */
+	 *
+	 *	$section->getDisabledChoices(); // []
+   	 */
 	function getDisabledChoices() {
 		if(!$this->isParsed()) {
 			return [];
@@ -168,7 +177,9 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 	/**
 	 * Choices, that are not checked by user, but they are common to
 	 * all items
-   **/
+	 *
+	 *	$section->getImplicitChoices(); // []
+  	 */
 	function getImplicitChoices() {
 		if(!$this->isParsed()) {
 			return [];
@@ -258,7 +269,7 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 
 		$pname = $this->getParamName();
 		if(!key_exists($pname, $values)) {
-			$this->values=[];
+			$this->values = [];
 		} else {
 			$this->values = $values[$pname];
 		}
@@ -266,10 +277,10 @@ abstract class FilterChoiceSection extends FilterBaseSection {
 			$possible = $this->getPossibleChoices();
 			$diff = array_diff_key(array_flip($this->values),array_flip($possible));
 			if($diff) {
-				$this->values=array_flip(array_intersect_key(array_flip($this->values),array_flip($possible)));
+				$this->values = array_flip(array_intersect_key(array_flip($this->values),array_flip($possible)));
 				switch($this->options['unknown_choices']) {
 					case 'exception':
-						$diff=implode(', ', array_flip($diff));
+						$diff = implode(', ', array_flip($diff));
 						throw new InvalidChoiceException($this, $diff, "The following value(s): {$diff} are not allowed for {$this->name}");
 				}
 			}

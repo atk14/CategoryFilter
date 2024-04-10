@@ -19,7 +19,7 @@ class FilterFinder extends TableRecord_Finder {
 		$this->_Records = null;
     $this->options = $options += array(
 			"class_name" => $filter->getModel(),
-      "use_cache" => TABLERECORD_USE_CACHE_BY_DEFAULT,
+			"use_cache" => TABLERECORD_USE_CACHE_BY_DEFAULT,
 			"sql_options" => [],
 			"postprocess" => null,
 			"pager" => null,                         //AjaxPager object to read the order and limit from
@@ -31,13 +31,13 @@ class FilterFinder extends TableRecord_Finder {
 			$sql_options['limit'] = $options['pager']->getLimit();
 			$sql_options['offset'] = $options['pager']->getOffset();
 			$order = $options['pager']->getSqlOrder();
-			if($order && $order!=self::DEFAULT_ORDER) { $sql_options['order'] = $order ; }
+			if($order && $order != self::DEFAULT_ORDER) { $sql_options['order'] = $order ; }
 		}
 
 		$this->result = $filter->result(['sql_options' => $sql_options]);
 		list($query, $bind) = $this->result->distinctOnSelect( $filter->getIdField() );
-		$this->query=$query;
-		$this->bind=$bind;
+		$this->query = $query;
+		$this->bind = $bind;
 
 		$query_options = array_diff_key($options, [
 				'class_name' => false,

@@ -22,15 +22,19 @@ class FilterFlagsSection extends FilterChoiceSection {
 	var $fixedFields = null;
 	var $fixedValues = null;
 
+	var $forceSelectedChoices = [];
+
 	function __construct($filter, $name, $options) {
 		parent::__construct($filter, $name, $options);
 		$this->options += [
 			'fields' => null,      //e.g. [ is_active, action_item => "CAST(table.action_item AS BOOL)" ] -- choices are given boolean fields
-			'visible_choices' => null, #If it is set, limit displayed choices by the given list
+			'visible_choices' => null, // e.g. ["action_item"]; it is set, limit displayed choices by the given list
 			'fixed_values' => [],
 			'operator' => 'OR',
 			'field_expression' => null,
 			'field_expressions' => [],
+
+			'force_selected_choices' => [], // e.g. ["action_item"]
 		];
 
 		if(key_exists('choices', $this->options['form_field_options']) && !$this->options['fields']) {
@@ -58,6 +62,10 @@ class FilterFlagsSection extends FilterChoiceSection {
 		if($this->options['fixed_values']) {
 			$this->setFixedValues($this->options['fixed_values']);
 		}
+
+		if($this->options["force_selected_choices"]){
+			$this->setForceSelectedChoices($this->options["force_selected_choices"]);
+		}
 	}
 
 	function getVisibleFields() {
@@ -84,6 +92,11 @@ class FilterFlagsSection extends FilterChoiceSection {
 		}
 	}
 
+	function setForceSelectedChoices($values){
+		$this->forceSelectedChoices = $values;
+		//$this->addConditions($values, $this->filter->unfilteredSql);
+	}
+
 	function setOperator($operator) {
 		$this->operator = $operator;
 		$this->andOperator = strtoupper($operator) == 'AND';
@@ -96,7 +109,7 @@ class FilterFlagsSection extends FilterChoiceSection {
 		$result = $sql->result($this->sqlOptions(!$this->andOperator));
 		foreach($this->visibleFields as $k => $v) {
 				if(is_array($v)) {
-					$v=$v['condition'];
+					$v = $v['condition'];
 				}
 				$fields[] = "bool_or($v) AS \"$k\"";
 		}
@@ -108,7 +121,7 @@ class FilterFlagsSection extends FilterChoiceSection {
 
 	function getUsedFields() {
 		$fields = $this->fields;
-		$fields = array_map(function($v) { return is_array($v)?$v['condition']:$v; }, $fields);
+		$fields = array_map(function($v) { return is_array($v) ? $v['condition'] : $v; }, $fields);
 		return array_values(\SqlBuilder\FieldsUtils::StripFields($fields));
 	}
 
@@ -120,7 +133,7 @@ class FilterFlagsSection extends FilterChoiceSection {
 			$where = " AND $where";
 		}
 		foreach($this->getVisibleFields() as $k => $v) {
-			if(is_array($v)) { $v=$v['condition']; };
+			if(is_array($v)) { $v = $v['condition']; };
 			$fields[] = "($v$where)::integer AS \"$k\"";
 			$results[] = "sum(\"$k\") AS \"$k\"";
 		}
@@ -132,23 +145,35 @@ class FilterFlagsSection extends FilterChoiceSection {
 		return array_map("intval", array_filter($out));
 	}
 
+	/**
+	 * Add conditions to ParsedSqlResult based on given values
+	 *
+	 *	if($c = $section->getConditions(["on_stock"])){
+	 *		// there's something to filter with in $c
+	 *	}
+	 */
 	function getConditions($values) {
-		$values = array_intersect_key( $this->fields, array_flip($values) );
+		$values = array_keys(array_flip($values) + array_flip($this->forceSelectedChoices));
+		$values = array_intersect_key($this->fields, array_flip($values));
+
 		$joins = [];
 		foreach($values as &$v) {
 			if(is_array($v)) {
 				$j = $v['join'] ?? [];
-				if(!is_array($j)) $j=[$j];
+				if(!is_array($j)){ $j = [$j]; }
 				$joins = $joins + array_flip($j);
-				$v=$v['condition'];
+				$v = $v['condition'];
 			} else {
 				$joins[$this->getMainJoinName()] = true;
 			}
 		}
 
-		if(!$values) { return; }
-		$conditions = "((" . implode(") {$this->operator}  (", $values). "))";
+		if(!$values) { return null; }
+
+		$conditions = "(" . implode(") {$this->operator}  (", $values). ")";
+		$conditions = "($conditions)";
 		$joins = array_filter(array_keys($joins));
+
 		return [
 			'condition' => $conditions,
 			'joins'     => $joins
