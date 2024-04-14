@@ -1,5 +1,4 @@
 <?php
-class FilterFlagsSection extends FilterChoiceSection {
 /**
  *       FilterSection for flags - boolean values given by SQL expression
  *
@@ -17,6 +16,7 @@ class FilterFlagsSection extends FilterChoiceSection {
  *         'form_label' => 'Zboží...'
  *       ]);
  */
+class FilterFlagsSection extends FilterChoiceSection {
 
 	var $fields = null;
 	var $fixedFields = null;
@@ -125,7 +125,7 @@ class FilterFlagsSection extends FilterChoiceSection {
 		return array_values(\SqlBuilder\FieldsUtils::StripFields($fields));
 	}
 
-	function getCountsOn($sql, $where=null) {
+	function getCountsOn($sql, $where = null) {
 		if(!$this->visibleFields) {
 			return [];
 		}
@@ -170,7 +170,7 @@ class FilterFlagsSection extends FilterChoiceSection {
 
 		if(!$values) { return null; }
 
-		$conditions = "(" . implode(") {$this->operator}  (", $values). ")";
+		$conditions = "(" . implode(") {$this->operator} (", $values). ")";
 		$conditions = "($conditions)";
 		$joins = array_filter(array_keys($joins));
 
