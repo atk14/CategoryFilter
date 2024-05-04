@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to CategoryFilter will be documented in this file.
 
+## [2.4.4] - 2024-05-05
+
+* b58e0dc - Added method FilterFlagsSection::setForceSelectedChoices() + refactoring + code style cleaning
+* 64e1b9a - Added method FilterFinder::getPageSize()
+
 ## [1.0.3] - 2022-04-07
 
 * ed4c21a - FilterRangeField::update_by_filter() fixed
