@@ -112,6 +112,16 @@ class FilterFinder extends TableRecord_Finder {
 		return $this->result->sqlOptions['limit'];
 	}
 
+	/**
+	 * Page size is the same or lower than limit
+	 *
+	 *	$filter_finder->getPageSize(); // e.g. 20
+	 *	$filter_finder->getLimit(); // e.g. 20, 40, 60
+	 */
+	function getPageSize() {
+		return $this->getPager() ? $this->getPager()->getPageSize() : $this->getLimit();
+	}
+
 	function getPager() {
 		return $this->options['pager'];
 	}
