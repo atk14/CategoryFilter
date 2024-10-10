@@ -36,6 +36,17 @@ class FilterException extends Exception {};
 class Filter implements IteratorAggregate {
 
 	var $hasNoRecords = false;
+	var $options;
+	var $sections;
+	var $visibleSections;
+	var $unfilteredSql;
+	var $unfilteredSqlCount;
+	var $resultSql;
+	var $filteredSql;
+	var $filteredSqlCount;
+	var $params;
+	var $filtered;
+	var $table;
 
 	function __construct($table, $options) {
 		$options += [

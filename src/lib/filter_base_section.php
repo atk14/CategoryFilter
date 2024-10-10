@@ -1,6 +1,14 @@
 <?php
 class FilterBaseSection {
 
+	var $name;
+	var $filter;
+	var $values;
+	var $fixed;
+	var $visible;
+	var $options;
+	var $joins;
+
 	/**
 	 * Base class for all sections
 	 */

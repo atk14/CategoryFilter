@@ -23,6 +23,9 @@ class FilterFlagsSection extends FilterChoiceSection {
 	var $fixedValues = null;
 
 	var $forceSelectedChoices = [];
+	var $visibleFields;
+	var $operator;
+	var $andOperator;
 
 	function __construct($filter, $name, $options) {
 		parent::__construct($filter, $name, $options);
