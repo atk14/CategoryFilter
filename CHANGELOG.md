@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to CategoryFilter will be documented in this file.
 
+## [2.4.5] - 2024-10-10
+
+* Fixes for PHP8.3
+
 ## [2.4.4] - 2024-05-05
 
 * b58e0dc - Added method FilterFlagsSection::setForceSelectedChoices() + refactoring + code style cleaning
