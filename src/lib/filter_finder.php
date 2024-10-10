@@ -13,6 +13,7 @@ class FilterFinder extends TableRecord_Finder {
 	var $result;
 	var $query;
 	var $bind;
+	var $_RawRecords;
 
 	function __construct($filter, $options = []) {
 		$this->filter = $filter;

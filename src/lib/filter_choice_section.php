@@ -16,6 +16,13 @@ class InvalidChoiceException extends FilterException {
  */
 abstract class FilterChoiceSection extends FilterBaseSection {
 
+	var $choiceLabels;
+	var $forceChoices;
+	var $possibleChoices;
+	var $availableChoices;
+	var $availableCounts;
+	var $updatedChoices;
+
 	function __construct($filter, $name, $options) {
 		$options = $options + [
 			'force_choices' => false, #If true, choices in form are not generated from DB, but just
