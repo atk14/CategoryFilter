@@ -2,6 +2,8 @@
 class FilterMultipleChoiceField extends MultipleChoiceField implements IFilterFormField {
 
 	var $disabled_choices = array();
+	var $section;
+	var $ignore_invalid_choices;
 
 	function __construct($options = []){
 		$this->section = $options['filter_section'];
