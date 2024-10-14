@@ -4,6 +4,9 @@
  */
 class FilterForm extends ApplicationForm {
 
+	var $top_fields;
+	var $filter; 
+
 	function set_up(){
 		$this->set_button_text(_("Filtrovat"));
 		$this->set_attr('id', 'filter_form');
