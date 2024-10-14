@@ -1,6 +1,8 @@
 <?php
-
 class FilterLandingPageByChoice {
+
+	var $options;
+	var $section;
 
 	function __construct($options = []) {
 		$options += [
