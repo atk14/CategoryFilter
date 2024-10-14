@@ -9,6 +9,12 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 
 	var $disabled_choices = [];	//grayed out choices
 	var $implicit_choices = [];	//always checked out choices
+	
+	var $href_params;
+	var $li_class;
+	var $ul_class;
+	var $escape_labels;
+	var $filter_section;
 
 	function __construct($options = array())
 	{
@@ -91,7 +97,7 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 				}
 
 				//$output[] = "<li class='checkbox$disabled'>$checkbox <label><a class='js-filter-checkbox-label' href='$href'>$label</a></label></li>";
-				$output[] = "$checkbox <label class='custom-control-label' for='$id'><a class='js-filter-checkbox-label' href='$href'${rel}>$label</a></label>";
+				$output[] = "$checkbox <label class='custom-control-label' for='$id'><a class='js-filter-checkbox-label' href='$href'{$rel}>$label</a></label>";
 			}
 			$output[] = "</div>";
 			$output[] = "</li>";
