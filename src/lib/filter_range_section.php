@@ -8,6 +8,9 @@
 
 class FilterRangeSection extends FilterBaseSection {
 
+	var $possibleRange;
+	var $availableRange;
+
 	function __construct($filter, $name, $options) {
 		$options = $options + [
 			'field' => null,                                    //e.g. price

@@ -6,6 +6,8 @@
 
 Class FilterRangeField extends RangeField implements IFilterFormField {
 
+	var $section;
+
 	function __construct($options = []){
 		$this->section = $options['filter_section'];
 		$options += [
