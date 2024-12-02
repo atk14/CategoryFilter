@@ -3,7 +3,7 @@ if ( !window.ATK14COMMON ) {
 }
 
 window.ATK14COMMON.filter_init = function( selector, onlyFields ) {
-			var $=window.$;
+			var $ = window.$;
 			var $form = $( selector );
 			if ( !$form.length ) {
 				return;
