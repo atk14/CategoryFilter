@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to CategoryFilter will be documented in this file.
 
+## [2.4.7] - 2024-12-02
+
+* minor fixes
+
 ## [2.4.6] - 2024-10-11
 
 * Fixes for PHP8.3
