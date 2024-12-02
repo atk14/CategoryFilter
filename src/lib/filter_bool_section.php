@@ -10,6 +10,9 @@
 
 class FilterBoolSection extends FilterBaseSection {
 
+	var $unfilteredCounts;
+	var $counts;
+
 	function __construct($filter, $name, $options) {
 		$options = $options + [
 			'field' => 'id',   //e.g. price
