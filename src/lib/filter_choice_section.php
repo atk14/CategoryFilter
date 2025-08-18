@@ -1,6 +1,9 @@
 <?php
 class InvalidChoiceException extends FilterException {
 
+	var $section;
+	var $value;
+
 	function __construct($section, $value, $msg) {
 		$this->section = $section;
 		$this->value = $value;
