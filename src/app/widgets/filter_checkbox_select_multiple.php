@@ -23,7 +23,7 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 			"href_params" => null,
 			"filter_section" => null,
 			"ul_class" => 'list list--checkboxes',
-			"li_class" => 'list__item'
+			"li_class" => 'list__item list__item--%option_value%'
 		);
 		$this->href_params = $options['href_params'];
 		$this->li_class = $options['li_class'];
@@ -72,7 +72,8 @@ class FilterCheckboxSelectMultiple extends SelectMultiple
 			$namestr = $name?"name='{$name}[]' ":"";
 			$checkbox = "<input type='checkbox' $namestr$value$disabled value=$option_value class='custom-control-input' id='$id'>";
 
-			$output[] = '<li class="'.$this->li_class.'">';
+			$li_class = str_replace("%option_value%",$option_value,$this->li_class);
+			$output[] = '<li class="'.$li_class.'">';
 			$output[] = "<div class=\"custom-control custom-checkbox\">";
 			if($disabled) {
 				//$output[] = "<li class='checkbox$disabled'>$checkbox <label>$label</label></li>";
