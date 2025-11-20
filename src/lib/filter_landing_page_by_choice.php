@@ -51,7 +51,11 @@ class FilterLandingPageByChoice {
 		}
 		if($this->options['label_function']) {
 			$fce=$this->options['label_function'];
-			return $fce($id);
+			$label = $fce($id);
+			if($this->options['label_lowercase']) {
+				$label = mb_strtolower($label);
+			}
+			return $label;
 		} else {
 			$label = $this->section->getChoiceLabels()[$id];
 			if($this->options['label_lowercase']) {
