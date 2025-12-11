@@ -82,6 +82,31 @@ class FilterForm extends ApplicationForm {
 		return array($error, $data);
 	}
 
+	/**
+	 * Returns list of form field keys.
+	 * Field keys will be ordered by rank of category filters.
+	 */
+	function get_field_keys() {
+		$out = parent::get_field_keys();
+
+		if ($out && isset($this->filter->options["category"])) {
+
+			$category = $this->filter->options["category"];
+			$order = [];
+			$filters = $category->getAvailableFilters();
+			foreach($filters as $f) {
+				$order[] = 'f_'.$f->getFilterName();
+			}
+
+			# chceme poradi jen pro ty, ktere mame v $out, jinak v dalsim kroku dostaneme vsechny klice z $order
+			$order = array_intersect($order, $out);
+			$sorted = array_keys(array_replace(array_flip($order), array_flip($out)));
+			$out = $sorted;
+		}
+
+		return $out;
+	}
+
 	function get_tab_fields() {
 		$out = $this->get_fields();
 		return array_diff_key($out, $this->top_fields);
