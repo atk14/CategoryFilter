@@ -58,7 +58,7 @@ class Filter implements IteratorAggregate {
 			'order' => null,
 			'prefix' => 'f_',
 			'dbmole' => '',
-			'sort_by_name' => true,
+			'sort_by_name' => false,
 			'model' => null,                 //Name of model for created finder
 			'materialize' => true,           //Materialize dataset of all possible records
 			'materialize_result' => true,    //Materialize dataset of all filtered records
