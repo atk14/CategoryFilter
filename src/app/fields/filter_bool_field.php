@@ -2,6 +2,7 @@
 class FilterBoolField extends ChoiceField implements IFilterFormField {
 
 	var $disabled_choices = array();
+	var $section;
 
 	function __construct($options = []){
 		$options += [
