@@ -74,6 +74,8 @@ class TcUsage extends TcBase {
 
 class FilterForCards extends Filter {
 
+	var $productJoin;
+
 	function __construct($options = []){
 		parent::__construct("cards", $options);
 		$this->addCondition("cards.visible AND NOT cards.deleted");
