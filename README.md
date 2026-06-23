@@ -1,7 +1,7 @@
 CategoryFilter
 ==============
 
-[![Build Status](https://travis-ci.com/atk14/CategoryFilter.svg?branch=master)](https://travis-ci.com/atk14/CategoryFilter)
+[![Tests](https://github.com/atk14/CategoryFilter/actions/workflows/tests.yml/badge.svg)](https://github.com/atk14/CategoryFilter/actions/workflows/tests.yml)
 
 Usage
 -----
