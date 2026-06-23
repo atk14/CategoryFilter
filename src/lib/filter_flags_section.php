@@ -167,7 +167,7 @@ class FilterFlagsSection extends FilterChoiceSection {
 				$joins = $joins + array_flip($j);
 				$v = $v['condition'];
 			} else {
-				$joins[$this->getMainJoinName()] = true;
+				$joins[(string)$this->getMainJoinName()] = true;
 			}
 		}
 
