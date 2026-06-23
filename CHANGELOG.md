@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to CategoryFilter will be documented in this file.
 
+## [2.4.11] - 2026-06-23
+
+* Fixes for PHP8.3+
+
+## [2.4.10]
+
+* 35c49fc - changed default ordering of filter sections
+
+## [2.4.9]
+
+* a42f041 - Filter label can be converted to lowercase
+
 ## [2.4.8] - 2025-08-18
 
 * b5429eb - Fix for PHP8.2
