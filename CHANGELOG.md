@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to CategoryFilter will be documented in this file.
 
+## [2.4.13] - 2026-07-04
+
+* ab8d505 - filter.js improved
+
 ## [2.4.12] - 2026-07-02
 
 * 0cf5ba7 - Typo
