@@ -40,7 +40,7 @@ class FilterBoolField extends ChoiceField implements IFilterFormField {
 				$this->set_choices($choices);
 			} else {
 				$this->disabled = true;
-				$this->inital = key($counts);
+				$this->initial = key($counts);
 			}
 	}
 }
