@@ -49,5 +49,15 @@ window.ATK14COMMON.filter_init = function( selector, onlyFields ) {
 						$( e.target ).data( "page" )
 					);
 				} );
-		}
+
+				// Sometimes #active_filters is not within the $form
+				if ( $form.find( "#active_filters" ).length === 0 ) {
+					$( "#active_filters" ).on( "click", function( e ) {
+						var $tag = $( e.target );
+						if ( $tag.hasClass( "js--active-filter" ) ) {
+							form.filtering++;
+						}
+					} );
+				}
+			}
 };
